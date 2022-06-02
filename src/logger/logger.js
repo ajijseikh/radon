@@ -5,4 +5,4 @@ console.log("Welcome to my application. I am Ajij and a part of  FunctionUp Rado
 
 
 }
-module.exports.welcome=welcome
+module.exports.welcome=welcome;

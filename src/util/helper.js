@@ -4,8 +4,9 @@ const printDate= function(){
 
 }
 const printMonth = function(){
-    const month = new Date("jan","feb","march","april","may","jun") 
-    console.log(month.getMonth());
+    const month = new Date() 
+    let kan=[ "jan","feb","march","april","may","jun","july","aus","sep","oct","nov","dec"]
+    console.log(kan[month.getMonth()]);
 
 }
 const getBatchInfo = function(){
@@ -14,5 +15,5 @@ const getBatchInfo = function(){
 
 }
 module.exports.printDate=printDate;
-module.exports.printMonth=printDate;
+module.exports.printMonth=printMonth;
 module.exports.getBatchInfo=getBatchInfo;
