@@ -21,7 +21,7 @@ const getBooksWithAuthorDetails = async function (req, res) {
 const createBook= async function (req, res) {
     let book = req.body
     let Author_Id= book.Author
-    if(!Author_Id) return res.send({msg:"Author_Id is madatory"})
+    // if(!Author_Id) return res.send({msg:"Author_Id is madatory"})
     if(Author_Id !=AutherModel_id) return res.send({msg:"Enter Correct Auther_Id"})
     let Publisher_Id=book.Publisher
     if(!Publisher_Id) return res.send({msg:"Publisher_Id is mandatary"})
