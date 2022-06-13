@@ -1,26 +1,36 @@
 
-const mid1= function ( req, res, next) {
-    req.falana= "hi there. i am adding something new to the req object"
-    console.log("Hi I am a middleware named Mid1")
-    next()
-}
+// 
+const UserDocModel = require("../models/UserDocModel");
+const ProductDocModel = require("../models/ProductDocModel");
+// const OrderDocModel = require("../models/OrderDocModel");
 
-const mid2= function ( req, res, next) {
-    console.log("Hi I am a middleware named Mid2")
-    next()
-}
 
-const mid3= function ( req, res, next) {
-    console.log("Hi I am a middleware named Mid3")
-    next()
-}
+const mid1 = function(req,res,next){
 
-const mid4= function ( req, res, next) {
-    console.log("Hi I am a middleware named Mid4")
-    next()
-}
+    if(req.header["isFreeAppUser"]===undefined){
+        res.send("request is missing mandatory header field")
+    }
+    else  next()
+    }
+    
+    const idCheck= async function(req,res,next){
+    
+        let data = req.body
+        myUser_id = req.body["user_id"]
+        myProduct_id = req.body["product_id"]
+        // myProductId= await ProductModel.findOne({product_id:myProduct_id})
+         myProductId= await ProductDocModel.findById(myProduct_id)
+        myUserId= await UserDocModel.findById(myUser_id)
+    if(myProductId&&myUserId){
+        next()
+    }
+    else{
+        res.send({error:"invalid userId or productId"})
+    
+    }
+    }
+    
+    module.exports.mid1 = mid1
+    module.exports.idCheck = idCheck
 
-module.exports.mid1= mid1
-module.exports.mid2= mid2
-module.exports.mid3= mid3
-module.exports.mid4= mid4
+
