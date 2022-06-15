@@ -8,13 +8,13 @@ router.get("/test-me", function (req, res) {
 
 router.post("/users", userController.createUser)
 
-router.post("/login",auth.auth, userController.loginUser)
+router.post("/login", userController.loginUser)
 
 //The userId is sent by front end
-router.get("/users/:userId",auth.auth, userController.getUserData)
-router.post("/users/:userId/posts",auth.auth, userController.postMessage)
+router.get("/users/:userId",auth.authorise,auth.authenticate,userController.getUserData)
+router.post("/users/:userId/posts",auth.authenticate,auth.authorise, userController.postMessage)
 
-router.put("/users/:userId",auth.auth, userController.updateUser)
-router.delete('/users/:userId',auth.auth, userController.deleteUser)
+router.put("/users/:userId",auth.authenticate,auth.authorise, userController.updateUser)
+router.delete('/users/:userId',auth.authenticate,auth.authorise, userController.deleteUser)
 
 module.exports = router;

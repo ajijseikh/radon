@@ -1,14 +1,14 @@
 // const authenticate = function(req, req, next) {
-//     //check the token in request header
-//     //validate this token
+    //check the token in request header
+    //validate this token
 
-//     next()
+    // next()
 // }
 
 
 // const authorise = function(req, res, next) {
-//     // comapre the logged in user's id and the id in request
-//     next()
+    // comapre the logged in user's id and the id in request
+    // next()
 // }
 
 
@@ -16,32 +16,28 @@ const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
 //In this we check token is present or not / check token is verified or not / and also check authorization
-const auth = async function (req, res, next) {
+const authenticate = async function (req, res, next) {
   let token = req.headers["x-Auth-token"] || req.headers["x-auth-token"];
 
   if (!token) res.send({ status: false, msg: "Token must be present" });
 
-  try {
-    let decodedtoken = jwt.verify(token, "functionup-radon");
-    let userId = req.params.userId;
-    let userLoggedIn = decodedtoken.userId;
+  const decodedToken = jwt.verify(token,"functionup-thorium")
+    if (!decodedToken) return res.send({status : false , msg:"token is not valid"});
 
-    if (userId!= userLoggedIn)
-      return res.send(
-        "User logged in is not allowed to modified another users data"
-      );
+    next();
+}
 
-    let user = await userModel.findById(userId);
-    if (!user) {
-      return res.send("No such user exists");
-    }
+const authorise = function(req, res, next) {
+    let token = req.headers["x-Auth-token"] || req.headers["x-auth-token"];
+    const decodedToken = jwt.verify(token,"functionup-thorium")
+    let userToBeModified = req.params.userId
+   
+    let userLoggedIn = decodedToken.userId
+    if(userToBeModified != userLoggedIn) return res.send({status: false, msg: 'User logged is not allowed to modify the requested users data'})
+    next();
 
-    req.user = user;
-}catch (error) {
-    return res.send("The token is Invalid");
-  }
 
-  next();
-};
+}
 
-module.exports.auth = auth;
+module.exports.authenticate = authenticate;
+module.exports.authorise = authorise;
