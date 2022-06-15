@@ -80,9 +80,20 @@ const updateUser = async function (req, res) {
   }
 
   let userData = req.body;
-  let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);
+  let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData,{new: true})
   res.send({ status: updatedUser, data: updatedUser });
 };
+
+const deleteUser = async function (req, res) {
+  let userId = req.params.userId;
+  let userDetails = await userModel.findOneAndUpdate(
+    { _id: userId },
+    { isDeleted: true } ,{new :true} 
+  );
+  res.send({ userDetails });
+};
+
+
 
 const postMessage = async function (req, res) {
     let message = req.body.message
@@ -119,4 +130,5 @@ module.exports.createUser = createUser;
 module.exports.getUserData = getUserData;
 module.exports.updateUser = updateUser;
 module.exports.loginUser = loginUser;
-module.exports.postMessage = postMessage
+module.exports.postMessage = postMessage;
+module.exports.deleteUser=deleteUser
