@@ -46,3 +46,19 @@ Create API's to do each of the following:
                     "url": "https://i.imgflip.com/5mvxax.jpg",
                     "page_url": "https://imgflip.com/i/5mvxax"
                 }
+
+
+
+
+
+https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
+
+
+
+my app id key= 7deca494a71d2d895a58a1e387894b11
+
+
+https://imgflip.com/i/6k6svh
+
+
+<a href="https://imgflip.com/i/6k6svh"><img src="https://i.imgflip.com/6k6svh.jpg" title="made at imgflip.com"/></a><div><a href="https://imgflip.com/memegenerator">from Imgflip Meme Generator</a></div>
