@@ -7,6 +7,8 @@ const varify=function(ObjectId){
   return mongoose.Types.ObjectId.isValid(ObjectId)
 }
 
+///*** create blog */
+
 const createBlog = async function (req, res) {
   try {
     let authorId = req.body.authorId;
@@ -25,6 +27,7 @@ const createBlog = async function (req, res) {
   }
 };
 
+///*** get blog */
 
 const getBlogs = async function (req, res) {
     try {
@@ -46,39 +49,64 @@ const getBlogs = async function (req, res) {
     res.status(500).send({ err: err });
   }
 };
-const updateBlogs = async function (req, res) {
-  try {
-    let blogId = req.params.blogId;
-    
-    if(!blogId) return res.status(404).send({status:false, msg:"BlogId is not found"})
-    let data = req.body;
-   
-    if(!data) return res.status(404).send({status:false,msg:"No data is  here"})
-    let updatedData = await blogModel.findByIdAndUpdate({ _id: blogId },{$set: {title: data.title,body: data.body, isPublished: true, publishedAt: new Date(), }});
-    let arrayupdate = await blogModel.findByIdAndUpdate({ _id: blogId },{ $push: { tags: data.tags, subcategory:data.subcategory } },{ new: true });
-    res.send({ msg: arrayupdate });
-  } catch (err) {
-    res.status(500).send({ err: err });
-  }
-};
 
-  const deleteById = async function (req, res) {
-    try {
-      let data = req.params.blogId;
-      if (!data) res.status(404).send("please provide blogId");
-      if(!varify(data)){return res.status(404).send("Id is not valid")}
-      let vari = await blogModel.findById({ _id:data} );
-      if (Object.keys(vari).length==0){res.status(404).send({ status: false, msg: "Id is not found in DataBase" });}
-      if (vari.isDeleted == false) {
-       await blogModel.findByIdAndUpdate({ _id:data},{ $set: { isDeleted: true,deletedAt: Date.now() } });
-        res.status(200).send({status:true});
-      }else{res.status(404).send({ status: false, msg: "no data found" })}
-    } catch (err) {
-      res.status(500).send({ err: err });
+///******update blog *****/
+
+const updateBlogs=async function(req,res){
+  try{
+const data=req.params
+let{title,subcategory,tags,body}=req.body
+
+
+if(!data.blogId){
+  return res.status(400).send({status:false,msg:"plz enter blogId"}) 
+
+}
+if(!mongoose.isValidObjectId(data.blogId)){
+  return res.status(400).send({status:false,msg:"please give valid blogId properly" })
+}
+if(!title|| title===undefined){
+  return res.status(400).send({status:false,msg:"title val must be present" }) 
+}
+
+if(title.trim().length===0 )
+
+return res.status(400).send({status:false,msg:"title val must be present" })
+
+const updateBlog=await blogModel.findByIdAndUpdate(data.blogId,{$set:{title,subcategory,tags,body,isPublished:true,publishedAt:new Date()}},{new:true})
+res.status(200).send({status:true,data:updateBlog})
+
+    }catch(err){
+        res.status(500).send({status:false,msg:err.message})
+}
+}
+
+/////deleted by Id blog////
+var isValidObjectId = require('mongoose-id-validator')
+
+const deleteById=async function(req,res){
+  try{
+      const data=req.params
+
+  
+if(!mongoose.isValidObjectId(data.blogId)){
+  return res.status(400).send({status:false,msg:"please give valid blogId " })
+}
+const deleteblog=await blogModel.findOneAndUpdate({_id:data.blogId,isDeleted:false},{$set:{isDeleted:true,isPublished:false}},{new:true})
+
+        res.status(200).send({status:true,data:deleteblog})
+        
+
+    }catch(err){
+        res.status(500).send({status:false,msg:err.message})
+
     }
-  };
+}
 
 
+  
+
+////*** deleted by Query blog */
 const deleteByQuery = async function (req, res) {
   try {
     let data = req.query;

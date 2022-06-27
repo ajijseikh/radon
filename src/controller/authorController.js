@@ -4,9 +4,11 @@ const jwt = require("jsonwebtoken");
 const createAuthor=async function (req,res){
 try{
     let authordata=req.body
+    let{fname,lname,title,email,password}=authordata
+
     if(!authordata.fname){
         res.status(404).send("please fill the firstName")
-        //  404:The server has not found anything matching the Request
+       
     }
     if(!authordata.lname){
        return res.status(404).send("please fill the LastName")
@@ -14,14 +16,17 @@ try{
     if(!authordata.title){
         return res.status(404).send("please fill the title")
     }
-    if(authordata.title != ["Mr"||"Mrs"||"Miss"]){
+    if(["Mr", "Mrs", "Miss"].indexOf(authordata.title)==-1){
         return res.status(404).send({err:"Please select title from these: Mr/Mrs/Miss "})
         }
     if(!authordata.email){
         return res.status(404).send("please fill the email")
     }
     if(!authordata.password){
-        return res.status(404).send("please fill the LastName")
+        return res.status(404).send("please fill the password")
+    }
+    if(!fname.trim()|| !lname.trim() || !title.trim() || !email.trim() || !password.trim()){
+        return res.status(400).send({status:false,msg:"please dont give space " })
     }
 
     let usedEmail = await authorModel.find({email:authordata.email})
